@@ -1,14 +1,13 @@
-interface User {
-  name: string;
-  age: number;
-}
+import express from 'express';
+import githubRoutes from './github';
 
-function saveUserToDatabase(user: User) {
-  //salvar no banco de dados alguma coisa bla bla
-  console.log(user);
-}
+const app = express();
+const PORT = 3000;
 
-saveUserToDatabase({
-  name: 'Rarirama',
-  age: 32,
+app.use(express.json());
+
+app.use('/api', githubRoutes);
+
+app.listen(PORT, () => {
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
