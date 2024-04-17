@@ -50,20 +50,6 @@ export default function Home() {
     }
   };
 
-  const loadUserRepos = async (username: string) => {
-    try {
-      const response = await fetch(`https://api.github.com/users/${username}/repos`);
-      if (response.ok) {
-        const reposData = await response.json();
-        setSelectedUser({ ...selectedUser, repos: reposData });
-      } else {
-        throw new Error('Erro ao buscar repositórios do usuário.');
-      }
-    } catch (error) {
-      console.error('Erro ao buscar repositórios do usuário:', error);
-    }
-  };
-
   return (
     <>
       <div className="w-full max-w-4xl mx-auto p-5 flex flex-col gap-5">
