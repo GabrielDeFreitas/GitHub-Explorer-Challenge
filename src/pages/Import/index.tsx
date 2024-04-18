@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
+import { Container } from '../../components/Container';
+import { Button } from '../../components/Button';
 
 export default function Import() {
   const [file, setFile] = useState(null);
@@ -34,7 +36,7 @@ export default function Import() {
 
   return (
     <>
-      <div className="w-full max-w-4xl mx-auto p-5 flex flex-col gap-5">
+      <Container>
         <label className="sr-only">Enviar arquivo</label>
         <div className="flex gap-6">
           <input
@@ -44,44 +46,40 @@ export default function Import() {
             id="file-input"
             className="block w-full border border-white/10 rounded-lg text-sm disabled:opacity-50 disabled:pointer-events-non file:bg-zinc-100 file:border-0 file:me-4 file:py-3 file:px-4"
           />
-          <button className="bg-cyan-500 hover:bg-cyan-400 text-sm font-bold py-2 px-4 rounded" onClick={handleUpload}>
-            Enviar
-          </button>
+          <Button onClick={handleUpload}>Enviar</Button>
         </div>
 
-        <div className="border border-white/10 rounded-lg">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-white/10">
-                <th className="py-3 px-4 text-sm font-semibold text-left">Nome do Repositório</th>
-                <th className="py-3 px-4 text-sm font-semibold text-left">Descrição</th>
-                <th className="py-3 px-4 text-sm font-semibold text-center">Data de Criação</th>
-                <th className="py-3 px-4 text-sm font-semibold text-center">Linguaguem</th>
-                <th className="py-3 px-4 text-sm font-semibold text-center">Link do repositório</th>
+        <table className="w-full border border-white/10 rounded-lg">
+          <thead>
+            <tr className="border-b border-white/10">
+              <th className="py-3 px-4 text-sm font-semibold text-left">Nome do Repositório</th>
+              <th className="py-3 px-4 text-sm font-semibold text-left">Descrição</th>
+              <th className="py-3 px-4 text-sm font-semibold text-center">Data de Criação</th>
+              <th className="py-3 px-4 text-sm font-semibold text-center">Linguaguem</th>
+              <th className="py-3 px-4 text-sm font-semibold text-center">Link do repositório</th>
+            </tr>
+          </thead>
+          <tbody>
+            {importedData.map((row, index) => (
+              <tr key={index} className="border-b border-white/10 hover:bg-white/5">
+                <td className="py-3 px-4 text-sm">{row['Nome do Repositório']}</td>
+                <td className="py-3 px-4 text-sm">{row['Descrição'] || 'Não especificado'}</td>
+                <td className="py-3 px-4 text-sm text-center">{row['Data de Criação']}</td>
+                <td className="py-3 px-4 text-sm text-center">{row['Linguagem'] || 'Não especificado'}</td>
+                <td className="py-3 px-4 text-sm text-center">
+                  <a
+                    href={row['Link do repositório']}
+                    target="_blank"
+                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                  >
+                    Acessar
+                  </a>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {importedData.map((row, index) => (
-                <tr key={index} className="border-b border-white/10 hover:bg-white/5">
-                  <td className="py-3 px-4 text-sm">{row['Nome do Repositório']}</td>
-                  <td className="py-3 px-4 text-sm">{row['Descrição'] || 'Não especificado'}</td>
-                  <td className="py-3 px-4 text-sm text-center">{row['Data de Criação']}</td>
-                  <td className="py-3 px-4 text-sm text-center">{row['Linguagem'] || 'Não especificado'}</td>
-                  <td className="py-3 px-4 text-sm text-center">
-                    <a
-                      href={row['Link do repositório']}
-                      target="_blank"
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    >
-                      Acessar
-                    </a>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+            ))}
+          </tbody>
+        </table>
+      </Container>
     </>
   );
 }

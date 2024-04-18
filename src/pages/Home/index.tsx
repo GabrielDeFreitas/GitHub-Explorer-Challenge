@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import DefaultAvatar from '/src/assets/defaulAvatar.png';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from '../../components/Button';
+import { Container } from '../../components/Container';
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -81,8 +83,8 @@ export default function Home() {
 
   return (
     <>
-      <div className="w-full max-w-4xl mx-auto p-5 flex flex-col gap-5">
-        <div className="flex flex-col gap-4">
+      <Container>
+        <section className="flex flex-col gap-4">
           <div className="flex gap-3 items-center justify-between">
             <div className="px-3 w-72 py-1.5 border border-white/10 rounded-lg flex items-center gap-3">
               <input
@@ -114,12 +116,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <button
-                    className="bg-cyan-500 hover:bg-cyan-400 text-sm font-bold py-2 px-4 rounded"
-                    onClick={() => setSelectedUser(user)}
-                  >
-                    Exibir Detalhes
-                  </button>
+                  <Button onClick={() => setSelectedUser(user)}>Exibir Detalhes</Button>
                 </div>
               </div>
             </div>
@@ -160,13 +157,13 @@ export default function Home() {
                   Repositórios de <span className="font-bold">{selectedUser.login}</span>
                 </h2>
                 <div className="text-right">
-                  <button
+                  <Button
                     className=" bg-emerald-500 hover:bg-emerald-400 text-sm font-bold py-2 px-4 rounded disabled:opacity-25"
                     onClick={downloadCSV}
                     disabled={!selectedUser.repos || selectedUser.repos.length === 0}
                   >
                     Exporta CSV
-                  </button>
+                  </Button>
                 </div>
               </div>{' '}
               <ul className="mt-4 grid grid-cols-2 items-center gap-3">
@@ -180,8 +177,8 @@ export default function Home() {
               </ul>
             </div>
           )}
-        </div>
-      </div>
+        </section>
+      </Container>
     </>
   );
 }

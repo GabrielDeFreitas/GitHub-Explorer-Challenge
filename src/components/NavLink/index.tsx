@@ -6,7 +6,7 @@ interface NavLinkProps extends ComponentProps<'a'> {
 
 export function NavLink({ children, ...props }: NavLinkProps) {
   return (
-    <a {...props} className="font-medium text-sm text-zinc-300">
+    <a {...props} className="font-medium text-sm text-zinc-300 hover:underline">
       {children}
     </a>
   );
