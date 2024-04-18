@@ -22,7 +22,7 @@ export default function Home() {
         setUsers(data.users);
         setPagination(data.pagination);
         setError('');
-        setSelectedUser(null); // Limpa o estado do usuário selecionado ao fazer nova consulta
+        setSelectedUser(null);
       } else {
         const errorMessage = await response.text();
         setError(errorMessage);
@@ -40,7 +40,7 @@ export default function Home() {
         setUsers(data.users);
         setPagination(data.pagination);
         setError('');
-        setSelectedUser(null); // Limpa o estado do usuário selecionado ao fazer nova consulta
+        setSelectedUser(null);
       } else {
         const errorMessage = await response.text();
         setError(errorMessage);
@@ -48,6 +48,30 @@ export default function Home() {
     } catch (error) {
       setError('Erro ao buscar usuários. Por favor, tente novamente mais tarde.');
     }
+  };
+
+  const generateCSVContent = () => {
+    if (!selectedUser || !selectedUser.repos) return '';
+
+    const header = 'Nome do Usuário, Nome do Repositório, Data de Criação\n';
+    const rows = selectedUser.repos
+      .map((repo: any) => `${selectedUser.login},${repo.name},${new Date(repo.created_at).toLocaleDateString('pt-BR')}`)
+      .join('\n');
+
+    return header + rows;
+  };
+
+  const downloadCSV = () => {
+    const csvContent = generateCSVContent();
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${selectedUser.login}_repos.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   };
 
   return (
@@ -126,12 +150,16 @@ export default function Home() {
 
           {selectedUser && (
             <div className="mt-6">
-              <div className="grid grid-cols-2 items-center py-3 px-4 border border-emerald-500 rounded-lg">
+              <div className="grid grid-cols-2 items-center py-3 px-4 border border-emerald-900 rounded-lg">
                 <h2 className="text-sm text-left">
                   Repositórios de <span className="font-bold">{selectedUser.login}</span>
                 </h2>
                 <div className="text-right">
-                  <button className=" bg-emerald-500 hover:bg-emerald-400 text-sm font-bold py-2 px-4 rounded">
+                  <button
+                    className=" bg-emerald-500 hover:bg-emerald-400 text-sm font-bold py-2 px-4 rounded disabled:opacity-25"
+                    onClick={downloadCSV}
+                    disabled={!selectedUser.repos || selectedUser.repos.length === 0}
+                  >
                     Exporta CSV
                   </button>
                 </div>
@@ -139,8 +167,9 @@ export default function Home() {
               <ul className="mt-4 grid grid-cols-2 items-center gap-3">
                 {selectedUser.repos &&
                   selectedUser.repos.map((repo: any) => (
-                    <li key={repo.id} className="text-sm py-3 px-4 border border-emerald-500 rounded-lg">
-                      {repo.name}
+                    <li key={repo.id} className="text-sm py-3 px-4 border border-emerald-900 rounded-lg">
+                      <h2 className="font-sm font-bold">{repo.name}</h2>
+                      <span className="text-sm">Criado: {new Date(repo.created_at).toLocaleDateString('pt-BR')}</span>
                     </li>
                   ))}
               </ul>
