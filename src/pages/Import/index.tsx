@@ -68,7 +68,11 @@ export default function Import() {
                   <td className="py-3 px-4 text-sm text-center">{row['Data de Criação']}</td>
                   <td className="py-3 px-4 text-sm text-center">{row['Linguagem'] || 'Não especificado'}</td>
                   <td className="py-3 px-4 text-sm text-center">
-                    <a href="" target="_blank" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                    <a
+                      href={row['Link do repositório']}
+                      target="_blank"
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    >
                       Acessar
                     </a>
                   </td>
