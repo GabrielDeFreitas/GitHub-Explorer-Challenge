@@ -19,11 +19,20 @@ export default function Home() {
   const [selectedUser, setSelectedUser] = useState<any>(null);
 
   const searchUsersHandler = async () => {
-    const { users, pagination, error, selectedUser } = await searchUsers(searchTerm);
-    setUsers(users);
-    setPagination(pagination);
-    setError(error);
-    setSelectedUser(selectedUser);
+    try {
+      if (!searchTerm.trim()) {
+        setError('É necessário digitar algo para realizar a busca.');
+        return;
+      }
+
+      const { users, pagination, error, selectedUser } = await searchUsers(searchTerm);
+      setUsers(users);
+      setPagination(pagination);
+      setError(error);
+      setSelectedUser(selectedUser);
+    } catch (error) {
+      setError('Erro ao buscar usuários. Por favor, tente novamente mais tarde.');
+    }
   };
 
   const goToPageHandler = async (page: number) => {
