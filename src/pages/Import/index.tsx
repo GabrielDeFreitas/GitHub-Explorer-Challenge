@@ -1,15 +1,17 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { Container } from '../../components/Container';
 import { Button } from '../../components/Button';
+import { uploadCSVFile } from '../../utils/fileUpload';
 
 export default function Import() {
-  const [file, setFile] = useState(null);
-  const [importedData, setImportedData] = useState([]);
+  const [file, setFile] = useState<File | null>(null);
+  const [importedData, setImportedData] = useState<any[]>([]);
 
   const handleFileChange = (event: any) => {
-    const selectedFile = event.target.files[0];
-    setFile(selectedFile);
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+    }
   };
 
   const handleUpload = async () => {
@@ -19,16 +21,8 @@ export default function Import() {
         return;
       }
 
-      const formData = new FormData();
-      formData.append('csvFile', file);
-
-      const response = await axios.post('http://localhost:3000/api/import', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      setImportedData(response.data.data);
+      const data = await uploadCSVFile(file);
+      setImportedData(data);
     } catch (error) {
       console.error('Erro ao fazer upload do arquivo:', error);
     }
