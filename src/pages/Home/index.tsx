@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../../components/Button';
 import { Container } from '../../components/Container';
 import { searchUsers, goToPage } from '../../utils/apiCalls';
+import { downloadCSV } from '../../utils/fileDownload';
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -49,17 +50,8 @@ export default function Home() {
     return header + rows;
   };
 
-  const downloadCSV = () => {
-    const csvContent = generateCSVContent();
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${selectedUser.login}_repos.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+  const downloadCSVHandler = () => {
+    downloadCSV(selectedUser, generateCSVContent);
   };
 
   return (
@@ -140,7 +132,7 @@ export default function Home() {
                 <div className="text-right">
                   <Button
                     className=" bg-emerald-500 hover:bg-emerald-400 text-sm font-bold py-2 px-4 rounded disabled:opacity-25"
-                    onClick={downloadCSV}
+                    onClick={downloadCSVHandler}
                     disabled={!selectedUser.repos || selectedUser.repos.length === 0}
                   >
                     Exporta CSV
