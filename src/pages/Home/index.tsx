@@ -3,6 +3,7 @@ import DefaultAvatar from '/src/assets/defaulAvatar.png';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../../components/Button';
 import { Container } from '../../components/Container';
+import { searchUsers, goToPage } from '../../utils/apiCalls';
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -16,40 +17,20 @@ export default function Home() {
   const [error, setError] = useState<string>('');
   const [selectedUser, setSelectedUser] = useState<any>(null);
 
-  const searchUsers = async () => {
-    try {
-      const response = await fetch(`http://localhost:3000/api/users?term=${searchTerm}`);
-      if (response.ok) {
-        const data = await response.json();
-        setUsers(data.users);
-        setPagination(data.pagination);
-        setError('');
-        setSelectedUser(null);
-      } else {
-        const errorMessage = await response.text();
-        setError(errorMessage);
-      }
-    } catch (error) {
-      setError('Erro ao buscar usuários. Por favor, tente novamente mais tarde.');
-    }
+  const searchUsersHandler = async () => {
+    const { users, pagination, error, selectedUser } = await searchUsers(searchTerm);
+    setUsers(users);
+    setPagination(pagination);
+    setError(error);
+    setSelectedUser(selectedUser);
   };
 
-  const goToPage = async (page: number) => {
-    try {
-      const response = await fetch(`http://localhost:3000/api/users?term=${searchTerm}&page=${page}`);
-      if (response.ok) {
-        const data = await response.json();
-        setUsers(data.users);
-        setPagination(data.pagination);
-        setError('');
-        setSelectedUser(null);
-      } else {
-        const errorMessage = await response.text();
-        setError(errorMessage);
-      }
-    } catch (error) {
-      setError('Erro ao buscar usuários. Por favor, tente novamente mais tarde.');
-    }
+  const goToPageHandler = async (page: number) => {
+    const { users, pagination, error, selectedUser } = await goToPage(searchTerm, page);
+    setUsers(users);
+    setPagination(pagination);
+    setError(error);
+    setSelectedUser(selectedUser);
   };
 
   const generateCSVContent = () => {
@@ -93,7 +74,7 @@ export default function Home() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <button onClick={searchUsers}>Buscar</button>
+              <button onClick={searchUsersHandler}>Buscar</button>
             </div>
           </div>
 
@@ -133,14 +114,14 @@ export default function Home() {
                 <div className="flex gap-1.5">
                   <button
                     className="bg-white/10 border border-white/10 rounded-md p-1.5 disabled:opacity-25"
-                    onClick={() => goToPage(pagination.currentPage - 1)}
+                    onClick={() => goToPageHandler(pagination.currentPage - 1)}
                     disabled={pagination.currentPage === 1}
                   >
                     <ChevronLeft className="size-4" />
                   </button>
                   <button
                     className="bg-white/10 border border-white/10 rounded-md p-1.5 disabled:opacity-25"
-                    onClick={() => goToPage(pagination.currentPage + 1)}
+                    onClick={() => goToPageHandler(pagination.currentPage + 1)}
                     disabled={pagination.currentPage === pagination.totalPages}
                   >
                     <ChevronRight className="size-4" />
