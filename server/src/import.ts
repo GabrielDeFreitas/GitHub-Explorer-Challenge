@@ -2,7 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import csvParser from 'csv-parser';
 import fs from 'fs';
-import amqp from 'amqplib/callback_api'; 
+import { connection } from '/home/gabrielfreitasdev/GitHub-Explorer-Challenge/server/db';
 
 const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
@@ -20,30 +20,19 @@ router.post('/import', upload.single('csvFile'), (req, res) => {
     .on('data', (data) => results.push(data))
     .on('end', () => {
       console.log(results);
+      for (const result of results) {
+        const dataCriacaoParts = result['Data de Criação'].split('/');
+        const dataCriacao = `${dataCriacaoParts[2]}-${dataCriacaoParts[1]}-${dataCriacaoParts[0]}`;
 
-      amqp.connect('amqp://localhost', function(error0, connection) {
-        if (error0) {
-          throw error0;
-        }
-        connection.createChannel(function(error1, channel) {
-          if (error1) {
-            throw error1;
+        connection.query('INSERT INTO github (nome_repositorio, descricao, linguagem, data_criacao, estrelas, link_repositorio) VALUES (?, ?, ?, ?, ?, ?)', [result['Nome do Repositório'], result['Descrição'], result['Linguagem'], dataCriacao, result['Estrelas'], result['Link do repositório']], (err, results) => {
+          if (err) {
+            console.error('Erro ao inserir dados no banco de dados:', err);
+            res.status(500).json({ error: 'Erro ao inserir dados no banco de dados' });
+            return;
           }
-          var queue = 'csvFiles';
-          var msg = csvFilePath;
-
-          channel.assertQueue(queue, {
-            durable: false
-          });
-
-          channel.sendToQueue(queue, Buffer.from(msg));
-          console.log(" [x] Sent %s", msg);
+          console.log('Dados inseridos com sucesso:', results);
         });
-        setTimeout(function() {
-          connection.close();
-        }, 500);
-      });
-
+      }
       res.status(200).json({ data: results });
     })
     .on('error', (error) => {
