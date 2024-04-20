@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Container } from '../../components/Container';
 import { Button } from '../../components/Button';
 import { uploadCSVFile } from '../../utils/fileUpload';
@@ -6,6 +6,19 @@ import { uploadCSVFile } from '../../utils/fileUpload';
 export default function Import() {
   const [file, setFile] = useState<File | null>(null);
   const [importedData, setImportedData] = useState<any[]>([]);
+  const [processing, setProcessing] = useState<boolean>(false);
+
+  useEffect(() => {
+    const eventSource = new EventSource('/api/processing');
+    eventSource.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      console.log('Processamento completo:', message);
+      setProcessing(false);
+    };
+    return () => {
+      eventSource.close();
+    };
+  }, []);
 
   const handleFileChange = (event: any) => {
     const selectedFile = event.target.files?.[0];
@@ -20,11 +33,13 @@ export default function Import() {
         console.error('Nenhum arquivo selecionado.');
         return;
       }
-
+      setProcessing(true);
       const data = await uploadCSVFile(file);
       setImportedData(data);
+      setProcessing(false);
     } catch (error) {
       console.error('Erro ao fazer upload do arquivo:', error);
+      setProcessing(false);
     }
   };
 
@@ -42,6 +57,8 @@ export default function Import() {
           />
           <Button onClick={handleUpload}>Enviar</Button>
         </div>
+
+        {processing && <p>Processando arquivo, por favor aguarde...</p>}
 
         <table className="w-full border border-white/10 rounded-lg">
           <thead>
