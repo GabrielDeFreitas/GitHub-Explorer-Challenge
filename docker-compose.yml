@@ -9,6 +9,7 @@ services:
       - "8080:8080"
     depends_on:
       - backend
+      - rabbitmq
 
   backend:
     build:
@@ -18,4 +19,11 @@ services:
       - "3000:3000"
     volumes:
       - ./server/uploads:/app/uploads
-    command: ["ts-node", "src/rabbitmqConsumer.ts"]
+    command: npm start
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
