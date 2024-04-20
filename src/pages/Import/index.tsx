@@ -50,6 +50,7 @@ export default function Import() {
               <th className="py-3 px-4 text-sm font-semibold text-left">Descrição</th>
               <th className="py-3 px-4 text-sm font-semibold text-center">Data de Criação</th>
               <th className="py-3 px-4 text-sm font-semibold text-center">Linguaguem</th>
+              <th className="py-3 px-4 text-sm font-semibold text-center">Estrelas</th>
               <th className="py-3 px-4 text-sm font-semibold text-center">Link do repositório</th>
             </tr>
           </thead>
@@ -60,6 +61,7 @@ export default function Import() {
                 <td className="py-3 px-4 text-sm">{row['Descrição'] || 'Não especificado'}</td>
                 <td className="py-3 px-4 text-sm text-center">{row['Data de Criação']}</td>
                 <td className="py-3 px-4 text-sm text-center">{row['Linguagem'] || 'Não especificado'}</td>
+                <td className="py-3 px-4 text-sm text-center">{row['Estrelas'] || '0'}</td>
                 <td className="py-3 px-4 text-sm text-center">
                   <a
                     href={row['Link do repositório']}

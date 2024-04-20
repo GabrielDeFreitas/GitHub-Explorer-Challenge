@@ -46,13 +46,13 @@ export default function Home() {
   const generateCSVContent = () => {
     if (!selectedUser || !selectedUser.repos) return '';
 
-    const header = 'Nome do Repositório,Descrição,Linguagem,Data de Criação,Link do repositório\n';
+    const header = 'Nome do Repositório,Descrição,Linguagem,Data de Criação,Estrelas,Link do repositório\n';
     const rows = selectedUser.repos
       .map((repo: any) => {
-        const { name, description, language, created_at, html_url } = repo;
+        const { name, description, language, created_at, stargazers_count, html_url } = repo;
         const formattedLanguage = language || 'Não especificado';
         const formattedDescription = description || 'Não especificado';
-        return `${name},${formattedDescription},${formattedLanguage},${new Date(created_at).toLocaleDateString('pt-BR')},${html_url}`;
+        return `${name},${formattedDescription},${formattedLanguage},${new Date(created_at).toLocaleDateString('pt-BR')},${stargazers_count},${html_url}`;
       })
       .join('\n');
 
