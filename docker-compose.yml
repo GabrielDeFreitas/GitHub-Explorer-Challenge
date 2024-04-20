@@ -18,3 +18,4 @@ services:
       - "3000:3000"
     volumes:
       - ./server/uploads:/app/uploads
+    command: ["ts-node", "src/rabbitmqConsumer.ts"]
