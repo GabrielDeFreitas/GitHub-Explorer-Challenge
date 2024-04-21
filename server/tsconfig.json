@@ -5,6 +5,10 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": "./",
+    "paths": {
+      "/home/gabrielfreitasdev/GitHub-Explorer-Challenge/server/db/*": ["./server/db/*"]
+    }
   }
 }

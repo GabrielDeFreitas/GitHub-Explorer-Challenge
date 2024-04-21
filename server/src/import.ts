@@ -2,7 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import csvParser from 'csv-parser';
 import fs from 'fs';
-import { connection } from '/home/gabrielfreitasdev/GitHub-Explorer-Challenge/server/db';
+import { connection } from '../db';
 
 const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
