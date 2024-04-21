@@ -3,23 +3,35 @@
 - [Instalação](#instalacao)
 - [Briefing do desafio ](#briefing-do-desafio)
 - [Requisitos](#requisitos)
-- [Desenvolvimento](#desenvolvimento)
-- [Conclusão](#conclusao)
 
 ## Instalação
 
 ### Servidor
 
+Acessar a pasta `server`
+
 ```sh
 cd server
 ```
+
+Baixar dependencias
 
 ```sh
 npm install
 ```
 
+Iniciar o servidor
+
 ```sh
 npm run start:dev
+```
+
+Conexão com o banco 
+
+Caso necessario altere os dados do banco em - `/server/db.ts`
+
+```sh
+npm run server
 ```
 
 ### Client
@@ -28,9 +40,24 @@ npm run start:dev
 npm install
 ```
 
+Iniciar o front-end [http://localhost:8080/](http://localhost:8080/) 
+
 ```sh
 npm run dev
 ```
+
+### RabbitMQ
+
+Para iniciar o RabbitMQ e acessar o painel de controle web [http://localhost:15672](http://localhost:15672)
+
+Certifique-se de ter o Docker instalado e em execução em sua máquina antes de executar este comando
+
+`docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:management`
+
+
+### Banco de dados
+
+
 
 ## Briefing do desafio
 
@@ -55,16 +82,3 @@ Este desafio envolve a criação de um aplicativo web com duas telas distintas e
 
 - Processar os dados importados usando jobs em segundo plano e uma fila com RabbitMQ.
 - Notificar o frontend quando o processamento estiver completo.
-
-### Recursos Adicionais Desejáveis:
-
-- Implementar filtros para os campos da tabela, permitindo aos usuários refinar sua visualização.
-
-### Deploy
-
-Faça um passo a passo do processo de execução do projeto,
-lembrando da obrigatoriedade do uso de Docker
-
-## Desenvolvimento
-
-## Conclusão
