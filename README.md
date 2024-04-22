@@ -29,6 +29,9 @@ npm run start:dev
 Conexão com o banco 
 
 Caso necessario altere os dados do banco em - `/server/db.ts`
+Ajustar o `paths` do arquivo db.ts para o caminho relativo para o endereço atual - `server
+/tsconfig.json
+`
 
 ```sh
 npm run server
